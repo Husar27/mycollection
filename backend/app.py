@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, redirect, url_for
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
@@ -6,8 +7,33 @@ from flask_cors import CORS
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 app = Flask(__name__, static_folder=BASE_DIR, static_url_path='')
+app.secret_key = 'supersecretkey'  # zmień na własny w produkcji
+login_manager = LoginManager()
+login_manager.init_app(app)
 CORS(app)
 DB_PATH = 'mycollection.db'
+
+# Model użytkownika dla Flask-Login
+class User(UserMixin):
+    def __init__(self, id, login, password):
+        self.id = id
+        self.login = login
+        self.password = password
+
+    @staticmethod
+    def get(user_id):
+        conn = get_db()
+        c = conn.cursor()
+        c.execute('SELECT * FROM users WHERE id = ?', (user_id,))
+        user = c.fetchone()
+        conn.close()
+        if user:
+            return User(user['id'], user['login'], user['password'])
+        return None
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(user_id)
 
 def get_db():
     conn = sqlite3.connect(DB_PATH)
@@ -72,16 +98,24 @@ def init_db():
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
-    login = data.get('login')
+    login_ = data.get('login')
     password = data.get('password')
     conn = get_db()
     c = conn.cursor()
-    c.execute('SELECT * FROM users WHERE login = ?', (login,))
+    c.execute('SELECT * FROM users WHERE login = ?', (login_,))
     user = c.fetchone()
     conn.close()
     if user and check_password_hash(user['password'], password):
+        user_obj = User(user['id'], user['login'], user['password'])
+        login_user(user_obj)
         return jsonify({'success': True, 'user_id': user['id']})
     return jsonify({'error': 'Nieprawidłowy login lub hasło'}), 401
+
+@app.route('/logout', methods=['POST'])
+@login_required
+def logout():
+    logout_user()
+    return jsonify({'success': True})
 
 # Dodawanie, pobieranie, zamówienia, sprzedaż itd. można dodać analogicznie
 
@@ -90,9 +124,10 @@ def serve_index():
     return send_from_directory(BASE_DIR, 'index.html')
 
 @app.route('/mycollection.html')
+@login_required
 def serve_collection():
     return send_from_directory(BASE_DIR, 'mycollection.html')
 
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5050)
