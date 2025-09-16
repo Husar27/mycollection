@@ -123,26 +123,56 @@
     <h1> Moja Kolekcja</h1>
     <form class="login-form" id="login-form" autocomplete="off">
       <input type="text" id="login" placeholder="Login" required />
-      <input type="password" id="password" placeholder="Hasło" required />
+      <div style="position:relative; width:100%;">
+        <input type="password" id="password" placeholder="Hasło" required style="padding-right:38px;" />
+        <span id="toggle-password" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer; user-select:none;" title="Pokaż/ukryj hasło">
+          <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="#aaa" stroke-width="2" d="M1.5 12S5 5.5 12 5.5 22.5 12 22.5 12 19 18.5 12 18.5 1.5 12 1.5 12Z"/><circle cx="12" cy="12" r="3.5" stroke="#aaa" stroke-width="2"/></svg>
+        </span>
+      </div>
       <div id="login-error" class="error" style="display:none"></div>
       <button type="submit">Zaloguj się</button>
     </form>
   </div>
   <div class="footer">&copy; <span style="color:#aaa;">jedryka-studio</span></div>
   <script>
-    // Przykładowe dane logowania
-    const USER = "admin";
-    const PASS = "whisky2025";
+    // Nowoczesne oczko SVG do podglądu hasła
+    const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("toggle-password");
+    const eyeIcon = document.getElementById("eye-icon");
+    let eyeOff = false;
+    const eyeSVG = '<svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="#aaa" stroke-width="2" d="M1.5 12S5 5.5 12 5.5 22.5 12 22.5 12 19 18.5 12 18.5 1.5 12 1.5 12Z"/><circle cx="12" cy="12" r="3.5" stroke="#aaa" stroke-width="2"/></svg>';
+    const eyeOffSVG = '<svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="#aaa" stroke-width="2" d="M1.5 12S5 5.5 12 5.5 22.5 12 22.5 12 19 18.5 12 18.5 1.5 12 1.5 12Z"/><circle cx="12" cy="12" r="3.5" stroke="#aaa" stroke-width="2"/><line x1="4" y1="20" x2="20" y2="4" stroke="#aaa" stroke-width="2"/></svg>';
+    togglePassword.addEventListener("click", function() {
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        togglePassword.innerHTML = eyeOffSVG;
+      } else {
+        passwordInput.type = "password";
+        togglePassword.innerHTML = eyeSVG;
+      }
+    });
+    // Obsługa logowania przez backend API
     const form = document.getElementById("login-form");
     const errorDiv = document.getElementById("login-error");
-    form.addEventListener("submit", function(e) {
+    form.addEventListener("submit", async function(e) {
       e.preventDefault();
       const login = document.getElementById("login").value.trim();
       const pass = document.getElementById("password").value;
-      if (login === USER && pass === PASS) {
-        window.location.href = "mycollection.html";
-      } else {
-        errorDiv.textContent = "Nieprawidłowy login lub hasło.";
+      try {
+        const res = await fetch("http://localhost:5000/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ login, password: pass })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          window.location.href = "mycollection.html";
+        } else {
+          errorDiv.textContent = data.error || "Nieprawidłowy login lub hasło.";
+          errorDiv.style.display = "block";
+        }
+      } catch (err) {
+        errorDiv.textContent = "Błąd połączenia z serwerem.";
         errorDiv.style.display = "block";
       }
     });
