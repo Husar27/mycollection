@@ -13,6 +13,10 @@ login_manager.init_app(app)
 CORS(app)
 DB_PATH = 'mycollection.db'
 
+# --- Cloudinary blueprint ---
+from cloudinary_uploads.blueprint import cloudinary_upload
+app.register_blueprint(cloudinary_upload)
+
 # Model użytkownika dla Flask-Login
 class User(UserMixin):
     def __init__(self, id, login, password):

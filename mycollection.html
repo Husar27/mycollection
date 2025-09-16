@@ -266,10 +266,11 @@ Usuń</button>
     <div class="modal-content">
       <h2 id="modal-title">Dodaj nową butelkę</h2>
       <form id="add-form">
-        <input type="text" id="name"
+  <input type="text" id="name"
 placeholder="Nazwa" required />
-        <input type="text" id="img"
-placeholder="URL miniaturki" />
+  <input type="file" id="img-upload" accept="image/*" />
+  <input type="text" id="img"
+placeholder="URL miniaturki (opcjonalnie, jeśli nie uploadujesz)" />
         <select id="brand" required>
           <option value="">Wybierz markę</option>
           <option value="Jack Daniel's">Jack
@@ -395,38 +396,68 @@ JSON.stringify(bottles));
 
    
 document.getElementById("add-form").addEventListener("submit",
-function (e) {
-      e.preventDefault();
+async function (e) {
+  e.preventDefault();
 
-      const newBottle = {
-        name: document.getElementById("name").value.trim(),
-        img: document.getElementById("img").value.trim(),
-        brand: document.getElementById("brand").value,
-        qty: document.getElementById("qty").value,
-        price: document.getElementById("price").value.trim(),
-        order: document.getElementById("order").value.trim(),
-        date: document.getElementById("date").value
-      };
+  const name = document.getElementById("name").value.trim();
+  const brand = document.getElementById("brand").value;
+  const qty = document.getElementById("qty").value;
+  const price = document.getElementById("price").value.trim();
+  const order = document.getElementById("order").value.trim();
+  const date = document.getElementById("date").value;
+  const imgUrlInput = document.getElementById("img").value.trim();
+  const imgFile = document.getElementById("img-upload").files[0];
 
-      if (!newBottle.name) {
-        alert("Nazwa butelki jest wymagana!");
+  if (!name) {
+    alert("Nazwa butelki jest wymagana!");
+    return;
+  }
+
+  let imgUrl = imgUrlInput;
+  if (imgFile) {
+    const formData = new FormData();
+    formData.append("file", imgFile);
+    try {
+      const res = await fetch("/upload_image", {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+      if (res.ok && data.secure_url) {
+        imgUrl = data.secure_url;
+      } else {
+        alert("Błąd uploadu zdjęcia: " + (data.error || ""));
         return;
       }
+    } catch (err) {
+      alert("Błąd połączenia z serwerem przy uploadzie zdjęcia.");
+      return;
+    }
+  }
 
-      if (editIndex !== null) {
-        bottles[editIndex] = newBottle;
-        editIndex = null;
-        modalTitle.textContent = "Dodaj nową butelkę";
-      } else {
-        bottles.push(newBottle);
-      }
+  const newBottle = {
+    name,
+    img: imgUrl,
+    brand,
+    qty,
+    price,
+    order,
+    date
+  };
 
-      localStorage.setItem("whiskyCollection",
-JSON.stringify(bottles));
-      renderList();
-      this.reset();
-      modal.style.display = "none";
-    });
+  if (editIndex !== null) {
+    bottles[editIndex] = newBottle;
+    editIndex = null;
+    modalTitle.textContent = "Dodaj nową butelkę";
+  } else {
+    bottles.push(newBottle);
+  }
+
+  localStorage.setItem("whiskyCollection", JSON.stringify(bottles));
+  renderList();
+  this.reset();
+  modal.style.display = "none";
+}
 
     addButton.addEventListener("click", () => {
       editIndex = null;
