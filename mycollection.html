@@ -266,11 +266,9 @@ Usuń</button>
     <div class="modal-content">
       <h2 id="modal-title">Dodaj nową butelkę</h2>
       <form id="add-form">
-  <input type="text" id="name"
-placeholder="Nazwa" required />
-  <input type="file" id="img-upload" accept="image/*" />
-  <input type="text" id="img"
-placeholder="URL miniaturki (opcjonalnie, jeśli nie uploadujesz)" />
+        <input type="text" id="name" placeholder="Nazwa" required />
+        <input type="file" id="img-upload" accept="image/*" />
+        <input type="text" id="img" placeholder="URL miniaturki (opcjonalnie, jeśli nie uploadujesz)" />
         <select id="brand" required>
           <option value="">Wybierz markę</option>
           <option value="Jack Daniel's">Jack
@@ -456,8 +454,9 @@ async function (e) {
   localStorage.setItem("whiskyCollection", JSON.stringify(bottles));
   renderList();
   this.reset();
+
   modal.style.display = "none";
-}
+});
 
     addButton.addEventListener("click", () => {
       editIndex = null;
