@@ -16,434 +16,114 @@
       font-family: Arial, sans-serif;
       background-color: #1e1e1e;
       color: #f0e6d2;
-      padding: 20px;
+      padding: 0;
       margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       overflow-x: hidden;
       max-width: 100vw;
     }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    #controls {
+    .login-container {
+      background-color: #2c2c2c;
+      padding: 32px 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 350px;
+      box-sizing: border-box;
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 20px;
+      flex-direction: column;
+      align-items: center;
     }
-
-    button, select, input[type="text"] {
-      padding: 10px 20px;
-      background-color: #8b5e3c;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
+    h1 {
+      margin-bottom: 24px;
+      font-size: 1.5em;
+      text-align: center;
     }
-
-    select, input[type="text"] {
+    .login-form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+      padding: 12px 16px;
       background-color: #3a3a3a;
       color: #f0e6d2;
-    }
-
-    input[type="text"] {
-      width: 200px;
-      max-width: 100vw;
-    }
-
-    #bottle-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 15px;
-      max-width: 100vw;
-    }
-    /* Responsywność dla urządzeń mobilnych */
-    @media (max-width: 600px) {
-      body {
-        padding: 5px;
-        max-width: 100vw;
-      }
-      h1 {
-        font-size: 1.2em;
-        margin-bottom: 10px;
-      }
-      #controls {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-        margin-bottom: 10px;
-      }
-      button, select, input[type="text"] {
-        font-size: 1em;
-        padding: 12px 8px;
-        width: 100%;
-        max-width: 100vw;
-      }
-      input[type="text"] {
-        width: 100%;
-        max-width: 100vw;
-      }
-      #bottle-list {
-        grid-template-columns: 1fr;
-        gap: 10px;
-        max-width: 100vw;
-      }
-      .bottle {
-        font-size: 1em;
-        padding: 12px 6px;
-        max-width: 100vw;
-      }
-      #details-popup {
-        width: 98vw;
-        max-width: 98vw;
-        padding: 10px;
-      }
-      .modal-content {
-        padding: 10px;
-        width: 98vw;
-        max-width: 98vw;
-      }
-      .button-row {
-        flex-direction: column;
-        gap: 6px;
-      }
-      #details-popup button {
-        width: 100%;
-        margin-top: 6px;
-      }
-    }
-
-    .bottle {
-      background-color: #2c2c2c;
-      padding: 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      text-align: center;
-      transition: transform 0.2s;
-    }
-
-    .bottle:hover {
-      transform: scale(1.05);
-    }
-
-    #details-popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #3a3a3a;
-      padding: 20px;
-      border-radius: 10px;
-      display: none;
-      z-index: 1000;
-      max-width: 98vw;
-      width: 350px;
-    }
-
-    #details-popup img {
-      max-width: 100%;
-      margin-bottom: 10px;
-      border-radius: 5px;
-    }
-
-    #details-popup button {
-      margin-top: 10px;
-      width: 48%;
-      padding: 10px;
       border: none;
-      border-radius: 5px;
-      background-color: #8b5e3c;
-      color: white;
-      cursor: pointer;
-    }
-
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
+      border-radius: 6px;
+      font-size: 1em;
       width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.7);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-
-    .modal-content {
-      background-color: #2c2c2c;
-      padding: 20px;
-      border-radius: 10px;
-      width: 98vw;
-      max-width: 500px;
       box-sizing: border-box;
     }
-    @media (max-width: 600px) {
-      .modal-content {
-        width: 98vw !important;
-        max-width: 98vw !important;
-        left: 1vw;
-        right: 1vw;
-        margin: 0;
-        padding: 8px;
-      }
-    }
-
-    .modal-content input, .modal-content select, .modal-content button {
-      width: 100%;
-      padding: 10px;
-      margin: 5px 0;
-      border: none;
-      border-radius: 5px;
-    }
-
-    .modal-content button {
+    .login-form button {
+      padding: 12px 16px;
       background-color: #8b5e3c;
       color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1em;
       cursor: pointer;
+      transition: background 0.2s;
     }
-
-    .hidden {
-      display: none;
+    .login-form button:hover {
+      background-color: #a97a50;
     }
-
-    .button-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
+    .error {
+      color: #ffb3b3;
+      background: #3a1e1e;
+      border-radius: 5px;
+      padding: 6px 10px;
+      margin-bottom: 8px;
+      text-align: center;
+      font-size: 0.95em;
+    }
+    @media (max-width: 600px) {
+      .login-container {
+        padding: 16px 4px;
+        max-width: 98vw;
+      }
+      h1 {
+        font-size: 1.1em;
+        margin-bottom: 16px;
+      }
+      .login-form input, .login-form button {
+        font-size: 1em;
+        padding: 12px 8px;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>🥃 Moja Kolekcja Whisky</h1>
-
-  <div id="controls">
-    <button id="add-button">➕ Dodaj
-butelkę</button>
-    <select id="sort-select">
-      <option value="all">Wszystkie marki</option>
-      <option value="Jack Daniel's">Jack
-Daniel's</option>
-      <option value="Jim Beam">Jim Beam</option>
-      <option value="Johnnie Walker">Johnnie
-Walker</option>
-      <option value="Macallan">Macallan</option>
-      <option value="Inne">Inne</option>
-    </select>
-    <input type="text" id="search-input"
-placeholder="🔍 Szukaj po nazwie..." />
+  <div class="login-container">
+    <h1> Moja Kolekcja</h1>
+    <form class="login-form" id="login-form" autocomplete="off">
+      <input type="text" id="login" placeholder="Login" required />
+      <input type="password" id="password" placeholder="Hasło" required />
+      <div id="login-error" class="error" style="display:none"></div>
+      <button type="submit">Zaloguj się</button>
+    </form>
   </div>
-
-  <div id="bottle-list"></div>
-
-  <div id="details-popup" class="hidden">
-    <img id="popup-img" src=""
-alt="Miniaturka" />
-    <h2 id="popup-name"></h2>
-    <p><strong>Marka:</strong> <span
-id="popup-brand"></span></p>
-    <p><strong>Ilość sztuk:</strong> <span
-id="popup-qty"></span></p>
-    <p><strong>Cena zakupu:</strong> <span
-id="popup-price"></span></p>
-    <p><strong>Nr zamówienia:</strong> <span
-id="popup-order"></span></p>
-    <p><strong>Data zakupu:</strong> <span
-id="popup-date"></span></p>
-    <div class="button-row">
-      <button id="edit-button">✏️ Edytuj</button>
-      <button id="delete-button">🗑️
-Usuń</button>
-    </div>
-    <button onclick="hideDetails()">Zamknij</button>
-  </div>
-
-  <div id="modal" class="modal">
-    <div class="modal-content">
-      <h2 id="modal-title">Dodaj nową butelkę</h2>
-      <form id="add-form">
-        <input type="text" id="name"
-placeholder="Nazwa" required />
-        <input type="text" id="img"
-placeholder="URL miniaturki" />
-        <select id="brand" required>
-          <option value="">Wybierz markę</option>
-          <option value="Jack Daniel's">Jack
-Daniel's</option>
-          <option value="Jim Beam">Jim Beam</option>
-          <option value="Johnnie Walker">Johnnie
-Walker</option>
-          <option value="Macallan">Macallan</option>
-          <option value="Inne">Inne</option>
-        </select>
-        <input type="number" id="qty"
-placeholder="Ilość sztuk" required />
-        <input type="text" id="price"
-placeholder="Cena zakupu" required />
-        <input type="text" id="order"
-placeholder="Nr zamówienia" />
-        <input type="date" id="date" required />
-        <button type="submit">Zapisz</button>
-        <button type="button"
-id="close-modal">Anuluj</button>
-      </form>
-    </div>
-  </div>
-
   <script>
-    let bottles = JSON.parse(localStorage.getItem("whiskyCollection")) || [];
-    let editIndex = null;
-
-    // Dodaj przykładową butelkę, jeśli kolekcja jest pusta
-    if (bottles.length === 0) {
-      bottles.push({
-        name: "Jack Daniel's Old No. 7",
-        img: "https://www.jackdaniels.com/sites/default/files/styles/product_image/public/2021-03/OldNo7_700ml.png",
-        brand: "Jack Daniel's",
-        qty: 1,
-        price: "120 zł",
-        order: "12345",
-        date: "2025-09-16"
-      });
-      localStorage.setItem("whiskyCollection", JSON.stringify(bottles));
-    }
-
-    const list = document.getElementById("bottle-list");
-    const popup = document.getElementById("details-popup");
-    const modal = document.getElementById("modal");
-    const addButton = document.getElementById("add-button");
-    const closeModal = document.getElementById("close-modal");
-    const sortSelect = document.getElementById("sort-select");
-    const searchInput = document.getElementById("search-input");
-    const modalTitle = document.getElementById("modal-title");
-    const editBtn = document.getElementById("edit-button");
-    const deleteBtn = document.getElementById("delete-button");
-
-    function renderList() {
-      list.innerHTML = "";
-      const selectedBrand = sortSelect.value;
-      const searchTerm = searchInput.value.toLowerCase();
-
-      bottles.forEach((bottle, index) => {
-        if (!bottle.name || bottle.name.trim() === "") return;
-
-        const matchesBrand = selectedBrand === "all" ||
-bottle.brand === selectedBrand;
-        const matchesSearch =
-bottle.name.toLowerCase().includes(searchTerm);
-
-        if (matchesBrand && matchesSearch) {
-          const div = document.createElement("div");
-          div.className = "bottle";
-          div.textContent = bottle.name;
-          div.onclick = () => showDetails(index);
-          list.appendChild(div);
-        }
-      });
-    }
-
-    function showDetails(index) {
-  const b = bottles[index];
-  document.getElementById("popup-img").src = b.img || "";
-  document.getElementById("popup-name").textContent = b.name;
-  document.getElementById("popup-brand").textContent = b.brand;
-  document.getElementById("popup-qty").textContent = b.qty;
-  document.getElementById("popup-price").textContent = b.price;
-  document.getElementById("popup-order").textContent = b.order;
-  document.getElementById("popup-date").textContent = b.date;
-  popup.classList.remove("hidden");
-  popup.style.display = "block";
-
-  editBtn.onclick = () => openEditModal(index);
-  deleteBtn.onclick = () => deleteBottle(index);
-    }
-
-    function hideDetails() {
-  popup.style.display = "none";
-  popup.classList.add("hidden");
-    }
-
-    function openEditModal(index) {
-      const b = bottles[index];
-      document.getElementById("name").value = b.name;
-      document.getElementById("img").value = b.img;
-      document.getElementById("brand").value = b.brand;
-      document.getElementById("qty").value = b.qty;
-      document.getElementById("price").value = b.price;
-      document.getElementById("order").value = b.order;
-      document.getElementById("date").value = b.date;
-      editIndex = index;
-      modalTitle.textContent = "Edytuj butelkę";
-      modal.style.display = "flex";
-      hideDetails();
-    }
-
-    function deleteBottle(index) {
-      if (confirm("Czy na pewno chcesz usunąć tę butelkę?"))
-{
-        bottles.splice(index, 1);
-        localStorage.setItem("whiskyCollection",
-JSON.stringify(bottles));
-        renderList();
-        hideDetails();
-      }
-    }
-
-   
-document.getElementById("add-form").addEventListener("submit",
-function (e) {
+    // Przykładowe dane logowania
+    const USER = "admin";
+    const PASS = "whisky2025";
+    const form = document.getElementById("login-form");
+    const errorDiv = document.getElementById("login-error");
+    form.addEventListener("submit", function(e) {
       e.preventDefault();
-
-      const newBottle = {
-        name: document.getElementById("name").value.trim(),
-        img: document.getElementById("img").value.trim(),
-        brand: document.getElementById("brand").value,
-        qty: document.getElementById("qty").value,
-        price: document.getElementById("price").value.trim(),
-        order: document.getElementById("order").value.trim(),
-        date: document.getElementById("date").value
-      };
-
-      if (!newBottle.name) {
-        alert("Nazwa butelki jest wymagana!");
-        return;
-      }
-
-      if (editIndex !== null) {
-        bottles[editIndex] = newBottle;
-        editIndex = null;
-        modalTitle.textContent = "Dodaj nową butelkę";
+      const login = document.getElementById("login").value.trim();
+      const pass = document.getElementById("password").value;
+      if (login === USER && pass === PASS) {
+        window.location.href = "mycollection.html";
       } else {
-        bottles.push(newBottle);
+        errorDiv.textContent = "Nieprawidłowy login lub hasło.";
+        errorDiv.style.display = "block";
       }
-
-      localStorage.setItem("whiskyCollection",
-JSON.stringify(bottles));
-      renderList();
-      this.reset();
-      modal.style.display = "none";
     });
-
-    addButton.addEventListener("click", () => {
-      editIndex = null;
-      modalTitle.textContent = "Dodaj nową butelkę";
-      document.getElementById("add-form").reset();
-      modal.style.display = "flex";
-    });
-
-    closeModal.addEventListener("click", () => {
-      modal.style.display = "none";
-      editIndex = null;
-    });
-
-    sortSelect.addEventListener("change", renderList);
-    searchInput.addEventListener("input", renderList);
-
-    renderList();
   </script>
 </body>
 </html>
