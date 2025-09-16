@@ -1,9 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
 
-app = Flask(__name__)
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+app = Flask(__name__, static_folder=BASE_DIR, static_url_path='')
 CORS(app)
 DB_PATH = 'mycollection.db'
 
@@ -82,6 +84,14 @@ def login():
     return jsonify({'error': 'Nieprawidłowy login lub hasło'}), 401
 
 # Dodawanie, pobieranie, zamówienia, sprzedaż itd. można dodać analogicznie
+
+@app.route('/')
+def serve_index():
+    return send_from_directory(BASE_DIR, 'index.html')
+
+@app.route('/mycollection.html')
+def serve_collection():
+    return send_from_directory(BASE_DIR, 'mycollection.html')
 
 if __name__ == '__main__':
     init_db()
